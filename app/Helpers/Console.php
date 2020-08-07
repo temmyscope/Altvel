@@ -47,7 +47,11 @@ class Console{
 
 	public static function migrate()
 	{
-		return Schema::run();
+		Schema::run();
+		foreach (app()->get('ENGINE')['MIGRATIONS'] as $value) {
+			self::generateModel($value);
+		}
+		return;
 	}
 
 	public static function generateView($name){
@@ -60,7 +64,7 @@ class Console{
 	}
 
 	public static function generateModel($name){
-		$nm = ucfirst($name);
+		$nm = str_replace(" ", "", ucwords(str_replace('_', " ", $name)) );
 		if (!file_exists(ROOT.DS."app".DS.$nm.".php")) {
 			$table = strtolower($name);
 			$model = fopen(ROOT.DS."app".DS."{$nm}.php", "w+");
