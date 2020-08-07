@@ -19,7 +19,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
   var notificationTitle = payload.data.title;
   var notificationOptions = {
     body: payload.data.body,
-    icon: "" /*insert direct link to ur website's icon over the web using https e.g. https://larafell.org/icon.png*/
+    icon: "" /*insert direct link to ur website's icon over the web using https e.g. https://altvel.org/icon.png*/
   };
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
@@ -38,14 +38,14 @@ self.addEventListener('fetch', function(event) {
   event.respondWith(
     fetch(event.request).catch(function(error) {
       console.error( 'Network request Failed. Serving offline page ' + error );
-      return caches.open('larafell-offline').then(function(cache) {
+      return caches.open('altvel-offline').then(function(cache) {
         return cache.match('offline.html');
       });
     }
   ));
 });
 self.addEventListener('refreshOffline', function(response) {
-  return caches.open('larafell-offline').then(function(cache) {
+  return caches.open('altvel-offline').then(function(cache) {
     console.log('Offline page updated from refreshOffline event: '+ response.url);
     return cache.put(offlinePage, response);
   });

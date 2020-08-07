@@ -5,7 +5,9 @@ class Application{
 	
 	public function __construct(){
 		$this->_set_ini_setings();
-		(!app()->get('APP_DEBUG')) ? $this->_set_reporting() : null;
+		if ( !app()->get('APP_DEBUG') ) {
+			$this->_set_reporting();
+		}
 		$this->_unregister_globals();
 	}
 

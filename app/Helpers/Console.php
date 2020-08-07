@@ -72,9 +72,9 @@ class Console{
 			
 			fwrite($model, $vw);
 			fclose($model);
-			print("{$nm} Model has been generated.\n\n");
+			print("\n{$nm} Model has been generated.\n\n");
 		}else{
-			print("{$nm} Model already exists.\n\n");
+			print("\n{$nm} Model already exists.\n\n");
 		}
 	}
 
