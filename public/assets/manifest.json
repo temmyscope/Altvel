@@ -1,0 +1,19 @@
+{
+    "dir": "ltr",
+    "lang": "en",
+    "name": "LaraFell PWA Framework",
+    "scope": "/",
+    "display": "standalone",
+    "start_url": "", /* enter ur start url*/
+    "short_name": "LaraFell",
+    "gcm_sender_id": "103953800507",
+    "theme_color": "transparent",
+    "description": "",
+    "orientation": "any",
+    "background_color": "transparent",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "icons": [
+        
+    ]
+}

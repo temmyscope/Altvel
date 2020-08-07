@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+/*-----------------------------------------------------------------------------------
+|							ALTVEL FRAMEWORK CONSTANTS								|
+|					Please do not tamper with the following constants 				|
+-----------------------------------------------------------------------------------*/
+define('DS', DIRECTORY_SEPARATOR);					
+define('ROOT', __DIR__);
+
+/*-------------------------------------------------------------------------------
+|							ALTVEL AUTOLOAD										|
+---------------------------------------------------------------------------------
+*/
+
+require __DIR__.'/vendor/autoload.php';
+
+App\Helpers\Console::Parse($argc, $argv);
+
+exit();

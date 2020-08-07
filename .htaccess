@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond $1 !^(public|robots.txt)
+    RewriteRule ^(.*)$ index.php/$1 [L]
+
+    # Redirect all requests to https: use this in production for secured routing
+    # RewriteCond %{SERVER_PORT} 80
+    # RewriteRule ^(.*)$ https://site address/$1 [R,L]
+</IfModule>
