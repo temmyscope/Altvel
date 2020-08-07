@@ -31,5 +31,4 @@ class File
     {
         return file_put_contents( app()->get('cache').'/'.$name.'.json', json_encode($data));
     }
-    
 }

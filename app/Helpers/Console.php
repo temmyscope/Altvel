@@ -97,6 +97,89 @@ class Console{
 	}
 
 	public static function configureApp($name){
+		if (!file_exists(ROOT.DS.'config'.DS.'app.php')) {
+			$model = fopen(ROOT.DS.'config'.DS.'app.php', "w+");
+			$vw = "<?php \nreturn [
+	#App settings
+	'APP_NAME' => 'Altvel',
+	'APP_KEY' => '',
+	'APP_ALG' => '',
+	'APP_IV' => '',
+	'APP_SALT' => '',
+	'APP_DEBUG' => true,
+	'APP_URL' => 'http://localhost/altvel',
+	'APP_CDN' => 'http://localhost/altvel/cdn',
+	'APP_ROOT' => __DIR__.'/..',
+
+
+	#Mail
+	'app_email' => '',
+	
+	#Sessions & Cookies
+	'CURRENT_USER_SESSION_NAME' => '',
+	'remember_me' => '',
+	'REMEMBER_ME_COOKIE_EXPIRY' => 2592000,
+	'redirect' => '',
+
+
+	#Files, Filesystem and Storage Upload Settings
+	'cdn' => __DIR__.'/../public/cdn',
+	'view' => __DIR__.'/../public/view',
+	'assets' => 'http://localhost/altvel/public/assets',
+	'cache' => __DIR__.'/../cache',
+	'upload_limit' => 5024768,
+	'allowed_files' => [ 
+		'jpg' => 'image/jpeg',
+		'png' => 'image/png', 
+		'jpeg' => 'image/jpeg'
+	],
+
+
+	#Database Migration Settings
+	'ENGINE' => [
+		'TYPE' => 'SQL',
+		'CHARSET' => 'utf8mb4',
+		'COLLATE' => 'utf8mb4_unicode_ci',
+		'MIGRATIONS' => [ 'users', 'user_sessions', 'contact_us' ],
+	],
+
+	#Html Templates
+	/*----------------------------------------------------------------------------------------------|
+	|								LARAFELL NAVIGATION BAR											|
+	|-----------------------------------------------------------------------------------------------|
+	|	this helps in setting the menu bar for guest users and loggged in users based on the array 	|
+	|	associative arrays can be used for menus with dropdown... 									| 
+	-----------------------------------------------------------------------------------------------*/
+
+	'USER_NAVBAR' => ['Home' => 'home', 'Search' => 'search', 'Logout' => 'logout'],
+	'GUEST_NAVBAR' => ['Login' => 'login', 'Register' => 'register', 'About' => 'about'],
+
+	'controllers' => [
+		'AuthController' => ['login', 'register', 'forgot_password', 'activate', 'about', 'logout'],
+		'ErrorsController' => ['_404', '_405', 'bad', 'denied', 'unknown'],
+		'RESTRICTED' => [
+			/*----------------------------------------------------------------------
+			| Controllers that requires login must reside in this restricted array.
+			----------------------------------------------------------------------*/
+			'HomeController' => [],
+			'SearchController' => []
+		],
+	],
+	'DEFAULT_CONTROLLER' => 'AuthController',
+
+
+	'services' => [
+		/*
+		|-------------------------------------------------------------------------------------|
+		|Register all api services your application makes use of in the form of: name => url  |
+		|-------------------------------------------------------------------------------------|
+		*/
+	],
+];";
+			
+			fwrite($model, $vw);
+			fclose($model);
+		}
 		$config = ROOT.DS.'config'.DS.'app.php';
 		self::configureTITLE($config, $name);
 		self::configureFOLDER($config, $name);
