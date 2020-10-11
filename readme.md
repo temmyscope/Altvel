@@ -10,8 +10,6 @@ hence we take the "boring stuffs" out of web appliction development for php deve
 
 AltVel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-# Php Controller Array Structure [Restricts endpoints/pages accessible, making development on a production server a possiblity] 
-
 # [ Simple, efficient & fast routing engine ]
 
 # ModelTrait for database data retrieval built on Doctrine's dbal package
@@ -22,11 +20,7 @@ AltVel takes the pain out of development by easing common tasks used in many web
 
 # Engineer Console:
 
-	=> Build Controllers from Console [ To see all commands: php Engineer]
-
-	=> Build Model from console
-	
-	=> Build Api from Console
+	=> Build Controllers, Model & Views from Console [ To see all commands: php Engineer]
 	
 	=> Automatically generate keys for secured session, cookie and salt
 
@@ -35,9 +29,7 @@ AltVel takes the pain out of development by easing common tasks used in many web
 
 The following conventions are used:
 
-#	All controllers must contain the word “Controller” in their names and must reside in the app\controller folder.
-
-# 	All view files must reside in a folder within the view folder within the public folder with respect to the view they display. 
+# All view files must reside in a folder within the view folder within the public folder with respect to the view they display. 
 
 #	The only file exempted is the app.blade.php which is the default view file for rendering.
 
