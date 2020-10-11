@@ -2,8 +2,9 @@
 namespace App\Controllers;
 
 use App\Auth;
+use Sevens\Vars\Validation;
 use App\Providers\{
-	Notification, Strings, Session
+	Notification, Strings, Session, Request
 };
 
 class AuthController extends Controller{
@@ -12,7 +13,7 @@ class AuthController extends Controller{
 		view('auth.index');
 	}
 
-	public function aboutEndPoint(){
+	public function aboutEndPoint($request, $response){
 		if( $this->request->isSecured() ){
 			$this->request->validate([
 				'email' => [ 'display' => 'E-mail', 'required' => true ],
@@ -44,8 +45,7 @@ class AuthController extends Controller{
 				$reg = Auth::insert([
 					'name' => post('name'),
 					'email' => post('email'),
-					'password' => Strings::hash(post('password')),
-					'backup_pass' => $strings->encrypt(post('password')),
+					'password' => Strings::hash( app()->get('APP_SALT') . post('password') ),
 					'activation' => $key,
 					'created_at' => Strings::time_from_string()
 				]);
@@ -68,15 +68,15 @@ class AuthController extends Controller{
 		}
 	}
 
-	public function loginEndPoint(){
-		if($this->request->isSecured()){
-			$this->request->validate([
+	public function loginEndPoint(Request $request){
+		if($request->isSecured()){
+			if( $request->validation([
 				'email' => [ 'display' => 'E-mail', 'required' => true ],
 				'password' => [ 'display' => 'Password', 'required' => true, 'min' => 8 ]
-			]);
-			if($this->request->passed()){
+			])->passed() ){
 				$user = Auth::findByEmail(post('email'));
-				if($user && Strings::verify_hash(post('password'), $user->password)){
+				$password = app()->get('APP_SALT').post('password');
+				if($user && Strings::verify_hash($password, $user->password)){
 					$remember = (is_null(post('remember_me'))) ? false : true;
 					$auth = new Auth((int) $user->id);
 					$auth->login($user, $remember);
@@ -95,9 +95,12 @@ class AuthController extends Controller{
 				'email' => [ 'display' => 'E-mail', 'required' => true ],
 			]);
 			if($this->request->passed() ){
-				$password = Auth::findfirst([ 'email' => post('email') ]);
-				if($password !== false && !empty($password) ){
-					$notify->AccountCreated(post('email'), $strings->decrypt($password->backup_pass));
+				$user = Auth::findfirst([ 'email' => post('email') ]);
+				if( !empty($user) ){
+					$salt = app()->get('APP_SALT');
+					$tmp_password = $strings->rand(random_int(8, 16));
+					Users::update([ 'password' => Strings::hash($salt.$tmp_password) ], ['id' => $user->id ]);
+					$notify->AccountCreated(post('email'),  $tmp_password );
 					$this->request->status('success', 'A password reset link has been sent to your E-mail.');
 				}else{
 					$this->request->status('error', 'The E-mail entered does not exist.');

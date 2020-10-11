@@ -1,4 +1,5 @@
 <?php
+
 use Seven\Vars\Strings;
 use Jenssegers\Blade\Blade;
 
@@ -7,7 +8,8 @@ function curl($url)
 	return new class($url){
         protected $_curl = [
             'url' => '',
-            'data' => [],
+			'data' => [],
+			'headers' => [],
             'time_out' => 200,
             'cookie_file' => '',
             'cookie_jar' => '',
@@ -21,8 +23,17 @@ function curl($url)
 		public function setData(array $postdata){
             $this->_curl['data'] = json_encode($postdata);
 			return $this;
-        }
-		public function setSession($cookiefile = ""){
+		}
+		public function setHeaders($headers)
+		{
+			$this->_curl['headers'] = $headers;
+			return $this;	
+		}
+		public function setHeader($headers)
+		{
+			return $this->setHeaders($headers);
+		}
+		public function setSession($cookiefile){
             $this->_curl['cookie_file'] = $cookiefile;
 			return $this;
         }
@@ -43,6 +54,7 @@ function curl($url)
 			return $this;
         }
 		public function send(){
+			array_push($this->_curl['headers'], 'Content-Type: application/json');
             $ch = curl_init($this->_curl['url']);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->_curl['method']) );
             if ( !empty($this->_curl['data']) ) {
@@ -55,10 +67,11 @@ function curl($url)
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, $this->_curl['ret']);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->_curl['time_out'] );
             curl_setopt($ch, CURLOPT_TIMEOUT, $this->_curl['time_out'] );
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $this->_curl['headers']);
 			$this->_result = curl_exec($ch);
-            $this->_errors = curl_error($ch);
+			$this->_errors = curl_error($ch);
 			curl_close($ch);
+			//dnd($this->_result);
 			if ( $this->_errors ) {
 				return false;
 			} else {
@@ -117,17 +130,57 @@ function dnd($var){
 	die();
 }
 
-function api($name)
-{
-	return app()->get('services')[$name];
-}
-
 function resume(){
-	return App\Providers\Router::getRedirect();
+	return getRedirect();
 }
 
-function redirect($var){
-	return App\Providers\Router::redirect($var);
+function redirect($location){
+	$location = app()->get('APP_URL'). "/{$location}";
+	if(!headers_sent()){ header("location: $location"); exit();
+	}else{
+		echo "<script type='text/javascript'> window.location.href= '{$location}';</script>";
+		echo '<noscript> <meta http-equiv="refresh" content="0;url='.$location.'"/></noscript>'; exit();
+	}
+}
+
+function getRedirect(){
+		$rdr = app()->get('REDIRECT');
+		if (Session::exists($rdr)) {
+			$route = Session::get($rdr);
+			Session::delete($rdr);
+			self::redirect($route);
+		}else{
+			self::redirect('home');
+		}
+}
+
+function pusher($tokens = [], string $msg)
+{
+		$msg = [ 
+			'title' => app()->get('APP_NAME')." Notification",
+			'body'	=> $msg,
+			'icon'	=> app->get('APP_PUSH_ICON')
+		];
+		return curl('https://fcm.googleapis.com/fcm/send')
+			->setMethod('POST')->setHeaders([ 
+				'Authorization: key='.app()->get('firebase_token'), 
+				'Content-Type: Application/json' 
+			])->setData(['registration_ids' => $tokens_array, 'data' => $msg ])
+			->send();
+}
+
+function mailer($email, $subject, $message){
+		$headers = implode("\r\n", [
+			'From: '. app()->get('APP_NAME') .' Team',
+			'Reply-To: '. app()->get('app_email'),
+			'MIME-Version: 1.0',
+			'Content-Type: text/html; charset=UTF-8',
+			'X-Priority: 3',
+			'nX-MSmail-Priority: high'
+		]);
+		if(mail($email, $subject, $message, $headers)){
+			return true;
+		}
 }
 
 function status(){

@@ -10,6 +10,7 @@ class Console{
 		if($argc > 1 && 'help' != strtolower($argv[1]) ){
 			switch(strtolower($argv[1])){
 				case 'app::start':
+				case 'app::init':
 					self::configureApp($argv[2] ?? 'Altvel');
 					break;
 				case 'app::controller':
@@ -102,6 +103,7 @@ class Console{
 
 	public static function configureApp($name){
 		if (!file_exists(ROOT.DS.'config'.DS.'app.php')) {
+			mkdir(ROOT.DS.'config');
 			$model = fopen(ROOT.DS.'config'.DS.'app.php', "w+");
 			$vw = "<?php \nreturn [
 	#App settings
@@ -114,6 +116,7 @@ class Console{
 	'APP_URL' => 'http://localhost/altvel',
 	'APP_CDN' => 'http://localhost/altvel/cdn',
 	'APP_ROOT' => __DIR__.'/..',
+	'APP_PUSH_ICON' => '', //file address to app push notification icon
 
 
 	#Mail
@@ -121,9 +124,9 @@ class Console{
 	
 	#Sessions & Cookies
 	'CURRENT_USER_SESSION_NAME' => '',
-	'remember_me' => '',
+	'REMEMBER_ME_COOKIE_NAME' => '',
 	'REMEMBER_ME_COOKIE_EXPIRY' => 2592000,
-	'redirect' => '',
+	'REDIRECT' => '',
 
 
 	#Files, Filesystem and Storage Upload Settings
@@ -149,36 +152,15 @@ class Console{
 
 	#Html Templates
 	/*----------------------------------------------------------------------------------------------|
-	|								LARAFELL NAVIGATION BAR											|
+	|								ALTVEL/LARAFELL NAVIGATION BAR																									|
 	|-----------------------------------------------------------------------------------------------|
-	|	this helps in setting the menu bar for guest users and loggged in users based on the array 	|
-	|	associative arrays can be used for menus with dropdown... 									| 
+	|	this helps in setting the menu bar for guest users and loggged in users based on the array 		|
+	|	associative arrays can be used for menus with dropdown... 																		| 
 	-----------------------------------------------------------------------------------------------*/
 
 	'USER_NAVBAR' => ['Home' => 'home', 'Search' => 'search', 'Logout' => 'logout'],
 	'GUEST_NAVBAR' => ['Login' => 'login', 'Register' => 'register', 'About' => 'about'],
 
-	'controllers' => [
-		'AuthController' => ['login', 'register', 'forgot_password', 'activate', 'about', 'logout'],
-		'ErrorsController' => ['_404', '_405', 'bad', 'denied', 'unknown'],
-		'RESTRICTED' => [
-			/*----------------------------------------------------------------------
-			| Controllers that requires login must reside in this restricted array.
-			----------------------------------------------------------------------*/
-			'HomeController' => [],
-			'SearchController' => []
-		],
-	],
-	'DEFAULT_CONTROLLER' => 'AuthController',
-
-
-	'services' => [
-		/*
-		|-------------------------------------------------------------------------------------|
-		|Register all api services your application makes use of in the form of: name => url  |
-		|-------------------------------------------------------------------------------------|
-		*/
-	],
 ];";
 			
 			fwrite($model, $vw);
