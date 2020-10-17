@@ -11,7 +11,13 @@ class Console{
 			switch(strtolower($argv[1])){
 				case 'app::start':
 				case 'app::init':
-					self::configureApp($argv[2] ?? 'Altvel');
+					$project = '';
+					if (isset($argv[2])) {
+						$project = $argv[2];
+					} else {
+						$project = self::receiveInput();
+					}
+					self::configureApp($project);
 					break;
 				case 'app::controller':
 					if(isset($argv[2]) && ctype_alpha($argv[2])){
@@ -39,6 +45,13 @@ class Console{
 			self::help();
 		}
 		exit;
+	}
+
+	public static function receiveInput()
+	{
+		echo "Enter your project name:\n";
+		$fp = fopen('php://stdin', 'r');
+		return fgets($fp, 1024);
 	}
 
 	public static function db($db)
@@ -95,8 +108,8 @@ class Console{
 	public static function help(){
 		print("To generate secured keys for your Altvel app, use:\n\t");
 		print("\"php Engineer App::start\" \n\n");
-		echo "To generate a controller: \n\t \"php Engineer App::Controller {{ controller_name }}\" \n\n";
-		echo "To generate a model: \n\t \"php Engineer App::Model {{ model_name }}\" \n\n";
+		echo "To generate a controller: \n\t \"php Engineer App::Controller controller_name\" \n\n";
+		echo "To generate a model: \n\t \"php Engineer App::Model model_name\" \n\n";
 		echo "To create a database: \n\t \"php Engineer App::db {{ db }}\" \n\n";
 		echo "To create a migration: \n\t \"php Engineer App::migrate\" \n\n";
 	}

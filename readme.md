@@ -1,39 +1,76 @@
-## About AltVel
+### About AltVel/SevenPHP
 
-=> AltVel is developed by Elisha Temiloluwa a.k.a TemmyScope	
+	- AltVel is developed by Elisha Temiloluwa a.k.a TemmyScope	
 
-=> Inspired By Phalcon & Laravel Php Web Application Frameworks.
+	- Inspired By Phalcon & Laravel Php Web Application Frameworks.
 
-AltVel is a web application framework with priority on security, performance and standard-compliance. 
-We believe development must be an enjoyable, flexible and creative experience to be truly fulfilling; 
-hence we take the "boring stuffs" out of web appliction development for php developers (code Engineers). 
+***AltVel is a web application framework with priority on security, performance and standard-compliance (Im that order). 
+We believe development must be enjoyable, flexible and creative; hence we take the "routines" out of web application development for php developers (code Engineers). 
+***
 
-AltVel takes the pain out of development by easing common tasks used in many web projects, such as:
+	- Install using composer
+```
+composer require altvel/altvel
+```
 
-# [ Simple, efficient & fast routing engine ]
+	=> Recommended: Create Project automatically using composer
+```
+coomposer create-project altvel/altvel
+```
 
-# ModelTrait for database data retrieval built on Doctrine's dbal package
+	- You can also download through github; This would involve a lot of manual configuration  
 
-# Supports all PHP PDO supported database types 
 
-# Improved Model class for eloquent data retrieval[method chaining]
+### AltVel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-# Engineer Console:
+***Simple, efficient & fast routing Engines***
 
-	=> Build Controllers, Model & Views from Console [ To see all commands: php Engineer]
+***ModelTrait for database data retrieval built on Doctrine's dbal package***
+
+***Supports all PHP PDO supported database types***
+
+***Improved Model class for eloquent data retrieval[method chaining]***
+
+***Engineer Console: [ To see all commands: php Engineer]***
 	
-	=> Automatically generate keys for secured session, cookie and salt
+***Automatically generate keys for secured session, cookie and salt***
 
-# A Utility HTML Builder [Fast Development for Backend Php developers]
+***A Utility HTML Template Builder [Fast Development for Backend Php developers]***
 
 
-The following conventions are used:
 
-# All view files must reside in a folder within the view folder within the public folder with respect to the view they display. 
+# The following conventions are used:
 
-#	The only file exempted is the app.blade.php which is the default view file for rendering.
+	=> All view files must reside in a folder within the view folder within the public folder with respect to the view they display.
+	
+***Generate using the commandline:***
 
-#	All classes that extend the Model class, should be placed directly under the app folder.
+```bash
+	php Engineer app::view {view_name}
+```
+
+***To generate a home view folder and initialize an index blade file...***
+```bash
+ php Engineer app::view home
+```
+***To generate a specific file in an existing view folder: 
+	For example creating index blade file in home folder***
+
+```bash
+ php Engineer app::subview home index
+```
+
+
+
+
+
+
+
+
+	=> The only file exempted is the app.blade.php which is the default view file for rendering.
+
+	=> All classes that extend the Model class, should be placed directly under the app folder.
+
 
 AltVel is accessible, flexible, editable, powerful, and provides tools required for large, robust applications.
 
@@ -43,7 +80,8 @@ AltVel has no syntax of its own but uses the inherited php syntax, making it ext
 
 ## AltVel How-To
 
-# The HTML template builder library is used to ease off frontend development but does not eliminate the need for a frontend designer:
+##### The HTML template builder Helper class does not eliminate the need for a frontend designer:
+####
 
 	=> Several helper methods are available for use.
 	
@@ -53,122 +91,99 @@ AltVel has no syntax of its own but uses the inherited php syntax, making it ext
 	
 	=> Generates CSRF-secured Form using  Array construct passed to generateForm static method
 
-# In order to access data sent to the View renderer, use $dataSource variable; 
-
-
-
-# Please Note that this framework is not suitable as an Api framework. Use the SevenPHP Microservice Framework for optimal performance
-
-
+### In order to access data sent to the View renderer, use $dataSource variable; 
+##
 
 ## Creating Migrations
 
-# This section shows you how to :- 
+***This section shows you how to :-*** 
 	*create database,
-	*migrate, 
-	*populate, 
-	*drop 
+	*migrate & 
+	*populate
 	table(s) using the name
 
-
-
 # Database Creation
-Database can be created using the terminal, for example, to create a database called music, use:
+	=> Database can be created using the terminal, for example, to create a database called music, use:
+
 ```bash
 	php Engineer app::db music
 ```
 
-Migrations can be added to the App\Providers\MigrationEngine migrate method in the form:
+	=> Migrations can be added to the App\Providers\MigrationEngine migrate method in the form:
 
 ```php
-
-###
 return [
-	//table ids are automatically generated as primary keys
+    //table ids are automatically generated as primary keys
 	'apps' => [
-		//the referenced table must already exist and the name must be exact to avoid errors
-		'token' => $this->foreign_key($table='sessions_table', $column='session' $type = 'int' || 'string'),
-
-		//$key can be one of [ 'primary', 'unique','fulltext', '' ]
-		'name' => $this->string($max_length=125, $null=true),
-
-		'pos' => $this->integer($max_length=10),
-
-		//in other to specify a maximum length, float should be used instead of a double
-		'account_balance' => $this->double() || $this->float($max_length=16), 
+	  //the referenced table must already exist and the name must be exact to avoid errors
+	  'token' => $this->foreign_key($table='sessions_table', $column='session' $type = 'int' || 'string'),
+	  
+	  //$key can be one of [ 'primary', 'unique','fulltext', '' ]
+	  'name' => $this->string($max_length=125, $null=true),
+	  'pos' => $this->integer($max_length=10),
+	  
+	  //in other to specify a maximum length, float should be used instead of a double
+	  'account_balance' => $this->double() || $this->float($max_length=16), 
 		
-		'is_verified' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" ),
-		
-		'created_at' => $this->datetime()
+	  'is_verified' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" ),
+	  'created_at' => $this->datetime()
 	],
 	//constraints: a table can only have one primary key and it will be autogenerated
 	'users' => [
-		'name' => $this->string($max_length=125, $null=false),
-		'email' => $this->string($max_length=125, $null=false, $key='unique'),
-		'password' => $this->string($max_length=125),
-		'backup_pass' => $this->string($max_length=150),
-		'activation' => $this->string($max_length=225),
-		'verified' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" ),
-		'created_at' => $this->datetime(),
-		'deleted' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" )
+	  'name' => $this->string($max_length=125, $null=false),
+	  'email' => $this->string($max_length=125, $null=false, $key='unique'),
+	  'password' => $this->string($max_length=125),
+	  'backup_pass' => $this->string($max_length=150),
+	  'activation' => $this->string($max_length=225),
+	  'verified' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" ),
+	  'created_at' => $this->datetime(),
+	  'deleted' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" )
 	],
 	
 	'user_sessions' => [
-		'user_id' => $this->foreign_key($table='users', $column='id', $type = 'int' ),
-		'session' => $this->string($max_length=225, $null=false),
-		'user_agent' => $this->string($max_length=225, $null=false),
-		'push_token' => $this->string($max_length=225, $null=false),
-		'created_at' => $this->datetime(),
-		'deleted' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" )
+	  'user_id' => $this->foreign_key($table='users', $column='id', $type = 'int' ),
+	  'session' => $this->string($max_length=225, $null=false),
+	  'user_agent' => $this->string($max_length=225, $null=false),
+	  'push_token' => $this->string($max_length=225, $null=false),
+	  'created_at' => $this->datetime(),
+	  'deleted' => $this->oneOf($options=["'true'", "'false'"], $default="'false'" )
 	],
 ];
-//constraints: a table can only have one primary key and it will be autogenerated
+//constraints: a table can only have one primary key and it will be autogenerated by the MigrationEngine Library
 ### id is auto-generated and would be ignored
 ``` 
 
-Populating a table with data can be done by adding array of arrays to the App\Providers\MigrationEngine populate method's return array
+#### Populate a table with data by adding array of arrays to the populate method's return array
 ```php
-###
-
 return [
 	'table name' => [ 'column name' => 'value' , 'column name' => 'value' , 'column name' => 'value' ],
 	'table name' => [...],
 ];
-
-#always remove the arrays after migration
-###
-
 ```
 
-Dropping table(s) can be done by adding table names to the App\Providers\MigrationEngine drop method's return array
-```php
+### Migration Generation Steps
+##
+	=> After creating migrations
 
-return [ 'user', 'user_sessions' ]; //drop tables
-
-```
-
-# Migration Generation Steps
-
-=> After creating migrations
-
-=> Add Name of tables to be migrated to the MIGRATION array in the configuration app.php file in the config folder
+	=> Add Name of tables to be migrated to the MIGRATION array in the configuration app.php file in the config folder
 
 ```php
 'MIGRATION' => [
 	'users', 'user_session', 'contact_us'
 ]
-#Always remember to remove already migrated models from the array
 ```
 
-=>then run "php Engineer app::migrate" in the terminal
+***Then run in the terminal
+```bash
+php Engineer app::migrate
+```
 
-
-## AltVel Sponsors
-
+### AltVel Sponsors
+##
 If you are interested in becoming a sponsor, please visit the AltVel [Patreon page](https://patreon.com/temmyscope).
 
-## Contributing
-
+### Contributing
+##
 Improve the code as much as possible; keeping syntax-flebility (ability to use plain php),
 security, standard-compliance and performance in mind. All Efforts will be appreciated. 
 Ensure to add your name to the comment section on the index.php page. 
@@ -178,5 +193,4 @@ Ensure to add your name to the comment section on the index.php page.
 If you discover a security vulnerability within AltVel, please send an e-mail to TemmyScope via [temmyscope@protonmail.com] All security vulnerabilities will be promptly addressed.
 
 ## License
-
 The AltVel framework is an open-source software.

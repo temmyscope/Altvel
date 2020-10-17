@@ -159,7 +159,7 @@ function pusher($tokens = [], string $msg)
 		$msg = [ 
 			'title' => app()->get('APP_NAME')." Notification",
 			'body'	=> $msg,
-			'icon'	=> app->get('APP_PUSH_ICON')
+			'icon'	=> app()->get('APP_PUSH_ICON')
 		];
 		return curl('https://fcm.googleapis.com/fcm/send')
 			->setMethod('POST')->setHeaders([ 

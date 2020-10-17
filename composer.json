@@ -1,15 +1,15 @@
 {
     "name": "altvel/altvel",
-    "description": "High Speed PHP Web Application Framework For PHP Engineers. Not Recommended For API.",
+    "description": "High Speed PHP Web Application Framework For PHP Engineers.",
     "type": "project",
-    "version": "v0.1.0",
+    "version": "v0.8.9",
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.3.0",
         "jenssegers/blade": "^1.3.0",
         "php-di/php-di": "^6.0.11",
         "sevens/model-trait": "^2.2.0",
-        "sevens/uploader-trait": "v1.0.0",
+        "sevens/uploader-trait": "^1.0.0",
         "sevens/vars": "^2.0.0",
         "sevens/router": "^3.1.0",
         "symfony/http-foundation": "^5.2",
@@ -45,7 +45,7 @@
         ]
     },
     "keywords": [
-                "altvel",
+                "altvel", "engineer",
                 "laravel", "framework",
                 "engineer"
     ]
