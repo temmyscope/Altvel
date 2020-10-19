@@ -1,18 +1,32 @@
 #!/usr/bin/env php
 <?php
-/*-----------------------------------------------------------------------------------
-|							ALTVEL FRAMEWORK CONSTANTS								|
-|					Please do not tamper with the following constants 				|
+/*----------------------------------------------------------------------------------|
+|													ALTVEL FRAMEWORK CONSTANTS																|
+|								Please do not tamper with the following constants 									|
 -----------------------------------------------------------------------------------*/
-define('DS', DIRECTORY_SEPARATOR);					
+
+define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', __DIR__);
 
-/*-------------------------------------------------------------------------------
-|							ALTVEL AUTOLOAD										|
----------------------------------------------------------------------------------
+/*
+|
+|---------------------------------------------------------------------------------|
+|												ALTVEL AUTOLOAD																						|
+|---------------------------------------------------------------------------------|
+|
 */
 
 require __DIR__.'/vendor/autoload.php';
+
+array_shift($argv);
+$argc = count($argv);
+
+if ($argc === 0) {
+	exit(
+		"Welcome To The Altvel Framework Engineer Console:\n\n".
+		"Oops!! To see available commands, Enter: php Engineer app::help"
+	);
+}
 
 App\Helpers\Console::Parse($argc, $argv);
 

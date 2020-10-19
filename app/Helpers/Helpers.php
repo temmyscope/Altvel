@@ -89,26 +89,9 @@ function curl($url)
 	};
 }
 
-function app($config = __DIR__.'/../../config/app.php')
+function app()
 {
-	return new class($config){
-		public function __construct($config){
-			$this->config = require $config;
-		}
-		public function __call($method, $args){
-			return $this->config[ strtolower($method) ] ?? null;
-		}
-
-		public function get(string $var)
-		{
-			return $this->config[$var] ?? null;
-		}
-
-		public function all()
-		{
-			return $this->config;
-		}
-	};
+	return (new App\Providers\Application());
 }
 
 function sanitize($dirty){
@@ -134,36 +117,27 @@ function resume(){
 	return getRedirect();
 }
 
-function redirect($location){
-	$location = app()->get('APP_URL'). "/{$location}";
-	if(!headers_sent()){ header("location: $location"); exit();
-	}else{
-		echo "<script type='text/javascript'> window.location.href= '{$location}';</script>";
-		echo '<noscript> <meta http-equiv="refresh" content="0;url='.$location.'"/></noscript>'; exit();
-	}
-}
-
 function getRedirect(){
-		$rdr = app()->get('REDIRECT');
+		$rdr = app()->config()->get('REDIRECT');
 		if (Session::exists($rdr)) {
 			$route = Session::get($rdr);
 			Session::delete($rdr);
-			self::redirect($route);
+			redirect( app()->config()->get('APP_URL'), $route);
 		}else{
-			self::redirect('home');
+			redirect('home');
 		}
 }
 
 function pusher($tokens = [], string $msg)
 {
 		$msg = [ 
-			'title' => app()->get('APP_NAME')." Notification",
+			'title' => app()->config()->get('APP_NAME')." Notification",
 			'body'	=> $msg,
-			'icon'	=> app()->get('APP_PUSH_ICON')
+			'icon'	=> app()->config()->get('APP_PUSH_ICON')
 		];
 		return curl('https://fcm.googleapis.com/fcm/send')
 			->setMethod('POST')->setHeaders([ 
-				'Authorization: key='.app()->get('firebase_token'), 
+				'Authorization: key='.app()->config()->get('firebase_token'), 
 				'Content-Type: Application/json' 
 			])->setData(['registration_ids' => $tokens_array, 'data' => $msg ])
 			->send();
@@ -171,8 +145,8 @@ function pusher($tokens = [], string $msg)
 
 function mailer($email, $subject, $message){
 		$headers = implode("\r\n", [
-			'From: '. app()->get('APP_NAME') .' Team',
-			'Reply-To: '. app()->get('app_email'),
+			'From: '. app()->config()->get('APP_NAME') .' Team',
+			'Reply-To: '. app()->config()->get('app_email'),
 			'MIME-Version: 1.0',
 			'Content-Type: text/html; charset=UTF-8',
 			'X-Priority: 3',
@@ -253,11 +227,7 @@ function route($var): string{
 	$var = str_replace('@', '/', $var);
 	$var = str_replace('.', '/', $var);
 	$var = str_ireplace('controller', '', $var);
-	return app()->get('APP_URL').'/'.$var;
-}
-
-function app_url(): string{
-	return app()->get('APP_URL');
+	return app()->config()->get('APP_URL').'/'.$var;
 }
 
 function view($view, $data = []): void

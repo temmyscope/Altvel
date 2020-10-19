@@ -22,6 +22,7 @@ coomposer create-project altvel/altvel
 
 
 ### AltVel takes the pain out of development by easing common tasks used in many web projects, such as:
+##
 
 ***Simple, efficient & fast routing Engines***
 
@@ -39,30 +40,23 @@ coomposer create-project altvel/altvel
 
 
 
-# The following conventions are used:
+### The following conventions are used:
+##
 
 	=> All view files must reside in a folder within the view folder within the public folder with respect to the view they display.
 	
 ***Generate using the commandline:***
-
-```bash
-	php Engineer app::view {view_name}
-```
 
 ***To generate a home view folder and initialize an index blade file...***
 ```bash
  php Engineer app::view home
 ```
 ***To generate a specific file in an existing view folder: 
-	For example creating index blade file in home folder***
+	For example creating edit blade file in profile folder***
 
 ```bash
- php Engineer app::subview home index
+ php Engineer app::view profile edit
 ```
-
-
-
-
 
 
 
@@ -194,3 +188,20 @@ If you discover a security vulnerability within AltVel, please send an e-mail to
 
 ## License
 The AltVel framework is an open-source software.
+
+
+### Todos
+##
+***Readme.md, Console helper, database packages, unit testing, environment variables and intrinsic application configurations, 
+creation of an internal $app object using an Application class, logging, other helpers, structuring  are being improved.***
+
+
+### Development & Library Integration
+##
+***integrations are done to fit a minimal, lightweight and performant production version.
+Hence libraries that are not required for production are not added to the framework using composer,
+rather they are built into the Application, using the conditional autoloading.
+A loose and less-than-overwhelming feel is kept on the number of folders and files.
+Due  to the PHP-8 feature for preloading, any simple library not necessary for development
+would not be added/required to reduce the memory effect of preloading autoloaded files.
+Developers can composer remove unnecessary libraries that do not fit with their use cases.*** 

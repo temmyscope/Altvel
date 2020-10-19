@@ -1,41 +1,56 @@
 <?php
 namespace App\Providers;
 
+use Seven\Vars\{Strings, Validation};
+
 class Application{
 	
 	public function __construct(){
-		$this->_set_ini_setings();
-		if ( !app()->get('APP_DEBUG') ) {
-			$this->_set_reporting();
+		if (!getenv('APP_DEBUG')) {
+			$this->setLogger();
 		}
-		$this->_unregister_globals();
+		$this->string = new Strings(getenv('APP_ALG'), getenv('APP_SALT'), getenv('APP_IV') );
 	}
 
-	private function _set_reporting(){
+	private function setLogger(){
 		ini_set("log_errors", TRUE);
-		ini_set("error_log", __DIR__.'/../../error_log');
+		ini_set("error_log", __DIR__.'/../../error.log');
 	}
 
-	private function _set_ini_setings(){
-		ini_set('zend_extension', 1);
-		ini_set('opcache.memory_consumption', 128);
-		ini_set('opcache.interned_strings_buffer', 8);
-		ini_set('opcache.max_accelerated_files', 4000);
-		ini_set('opcache.revalidate_freq', 60);
-		ini_set('opcache.fast_shutdown', 1);
-		ini_set('opcache.enable_cli', 1);
+	public function decrypt(string $str)
+	{
+		return $this->string->decrypt($str);
 	}
 
-	private function _unregister_globals(){
-		if (ini_get('register_globals')) {
-			$globals= ['_SESSION', '_COOKIE', '_POST', '_GET', '_SERVER', '_ENV', '_REQUEST', '_FILES'];
-			foreach ($globals as $g) {
-				foreach ($GLOBALS[$g] as $key => $value) {
-					if ($GLOBALS[$key] === $value) {
-						unset($GLOBALS[$key]);
-					}
-				}
+	public function encrypt(string $str)
+	{
+		return $this->string->encrypt($str);
+	}
+
+	public function config()
+	{
+		return new class(){
+			public function __construct(){
+				$this->config = require __DIR__.'/../../config/app.php';
 			}
-		}
-	} 
+			public function get(string $var)
+			{
+				return $this->config[$var] ?? null;
+			}
+			public function all()
+			{
+				return $this->config;
+			}
+		};
+	}
+
+	public function time(string $str = 'now'){
+		return $this->string->time_from_string($str, $this->config()->get('APP_TIMEZONE'));
+	}
+
+	public function validate(array $entries)
+	{
+		
+	}
+
 }
