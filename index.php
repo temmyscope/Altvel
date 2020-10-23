@@ -19,6 +19,7 @@ use App\Providers\Session;
 require __DIR__.'/vendor/autoload.php';
 
 /*
+| You don't need to do anything here
 |-----------------------------------------------------------------------------|
 | Load Altvel-Specific Application Object 																		|
 |-----------------------------------------------------------------------------|
@@ -27,6 +28,23 @@ require __DIR__.'/vendor/autoload.php';
 
 $app = app();
 
+$request = $app->request();
+
+$response = $app->response();
+
+
+/*
+| You don't need to do anything here
+|-----------------------------------------------------------------------------|
+| Load Altvel-Specific Application Object 																		|
+|-----------------------------------------------------------------------------|
+|
+*/
+
+
+
+
+
 /*
 |
 |------------------------------------------------------------------------------|
@@ -34,6 +52,7 @@ $app = app();
 |------------------------------------------------------------------------------|
 |
 */
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -46,11 +65,8 @@ $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_DRIVER']);
 |------------------------------------------------------------------------------|
 |
 */
-$router = new Router('App\Controllers');
 
-$request = Request::createFromGlobals();
-
-$response = new Response();
+$router = new Router($namespace = 'App\Controllers');
 
 //$router->enableCache(__DIR__.'/cache');
 
@@ -66,7 +82,7 @@ $router->middleware('web-auth', function($request, $response, $next){
 
 $router->middleware('api-auth', function($request, $response, $next){
 		$token = $request->headers->get('Authorization');
-		if ( !$token || Auth::isValid($token) ) {
+		if ( !$token || !Auth::isValid($token) ) {
 				return $response->setContent('Unauthorized.')
 				->setStatusCode(401)
 				->send();
