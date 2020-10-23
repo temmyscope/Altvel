@@ -34,6 +34,6 @@ if ($argc === 0) {
 	);
 }
 
-App\Helpers\Console::Parse($argc, $argv);
+Seven\Consoler\Console::Parse($argc, $argv);
 
 exit();

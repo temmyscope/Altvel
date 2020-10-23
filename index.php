@@ -16,7 +16,10 @@ use App\Providers\Session;
 |-----------------------------------------------------------------------------|
 |
 */
-require __DIR__.'/vendor/autoload.php';
+$loader = require __DIR__.'/vendor/autoload.php';
+
+# For adding namespaces
+//$loader->add('namespace', 'directory');
 
 /*
 | You don't need to do anything here

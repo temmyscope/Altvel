@@ -142,29 +142,29 @@ function getRedirect()
 
 function pusher($tokens = [], string $msg)
 {
-        $msg = [
-            'title' => app()->config()->get('APP_NAME') . " Notification",
-            'body'  => $msg,
-            'icon'  => app()->config()->get('APP_PUSH_ICON')
-        ];
-        return curl('https://fcm.googleapis.com/fcm/send')
-            ->setMethod('POST')->setHeaders([
-                'Authorization: key=' . app()->config()->get('firebase_token'),
-                'Content-Type: Application/json'
-            ])->setData(['registration_ids' => $tokens_array, 'data' => $msg ])
-            ->send();
+    $msg = [
+        'title' => app()->config()->get('APP_NAME') . " Notification",
+        'body'  => $msg,
+        'icon'  => app()->config()->get('APP_PUSH_ICON')
+    ];
+    return curl('https://fcm.googleapis.com/fcm/send')
+        ->setMethod('POST')->setHeaders([
+            'Authorization: key=' . app()->config()->get('firebase_token'),
+            'Content-Type: Application/json'
+        ])->setData(['registration_ids' => $tokens_array, 'data' => $msg ])
+        ->send();
 }
 
 function mailer($email, $subject, $message)
 {
-        $headers = implode("\r\n", [
-            'From: ' . app()->config()->get('APP_NAME') . ' Team',
-            'Reply-To: ' . app()->config()->get('app_email'),
-            'MIME-Version: 1.0',
-            'Content-Type: text/html; charset=UTF-8',
-            'X-Priority: 3',
-            'nX-MSmail-Priority: high'
-        ]);
+    $headers = implode("\r\n", [
+        'From: ' . app()->config()->get('APP_NAME') . ' Team',
+        'Reply-To: ' . app()->config()->get('app_email'),
+        'MIME-Version: 1.0',
+        'Content-Type: text/html; charset=UTF-8',
+        'X-Priority: 3',
+        'nX-MSmail-Priority: high'
+    ]);
     if (mail($email, $subject, $message, $headers)) {
         return true;
     }
