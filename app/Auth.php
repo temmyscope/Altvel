@@ -3,13 +3,15 @@
 namespace App;
 
 use App\Providers\{
-    Model, Cookie, Session, Strings
+    Application, Cookie, Session
 };
+
+use Seven\Model\Model,
+    ;
 
 class Auth extends Model
 {
 
- 
     public $id;
     protected static $table = 'users';
     protected static $fulltext = [];

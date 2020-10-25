@@ -22,6 +22,73 @@ class Application
         ini_set("error_log", __DIR__ . '/../../error.log');
     }
 
+    public function cookie($value='')
+    {
+        return new class(){
+            public function exists($name)
+            {
+                return (isset($_COOKIE[$name])) ? true : false ;
+            }
+
+            public function get($name)
+            {
+                return $_COOKIE[$name] ?? null;
+            }
+
+            public function set($name, $value)
+            {
+                $time = time() + (app()->get('REMEMBER_ME_COOKIE_EXPIRY'));
+                if (setcookie($name, $value, $time, '/')) {
+                    return true;
+                }
+                return false;
+            }
+
+            public function delete($name)
+            {
+                self::set($name, '', time() - 3600);
+            }
+        };
+    }
+
+    public function session($value='')
+    {
+        return new class(){
+            public static function exists($name)
+            {
+                return (isset($_SESSION[$name])) ? true : false ;
+            }
+            public static function get($name)
+            {
+                return $_SESSION[$name] ?? null;
+            }
+            public static function set($name, $value)
+            {
+                return $_SESSION[$name] = $value;
+            }
+            public static function delete($name)
+            {
+                if (self::exists($name)) {
+                    unset($_SESSION[$name]);
+                }
+            }
+            public static function destroy()
+            {
+                $_SESSION = array();
+                if (ini_get("session.use_cookies")) {
+                    $params = session_get_cookie_params();
+                    setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+                }
+                session_destroy();
+            }
+        };
+    }
+
+    public function file($value='')
+    {
+        return ;
+    }
+
     public function request()
     {
         $request = Request::createFromGlobals();
@@ -39,7 +106,7 @@ class Application
                 return $data;
             };
             $request->userAgent = function () use () {
-                return preg_replace('/\/[a-zA-Z0-9.]*/', '', $_SERVER['HTTP_USER_AGENT']);
+                return preg_replace($regx='/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT']);
             };
             return $request;
     }
