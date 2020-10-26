@@ -29,12 +29,10 @@ class Application
             {
                 return (isset($_COOKIE[$name])) ? true : false ;
             }
-
             public function get($name)
             {
                 return $_COOKIE[$name] ?? null;
             }
-
             public function set($name, $value)
             {
                 $time = time() + (app()->get('REMEMBER_ME_COOKIE_EXPIRY'));
@@ -43,38 +41,37 @@ class Application
                 }
                 return false;
             }
-
             public function delete($name)
             {
-                self::set($name, '', time() - 3600);
+                $this->set($name, '', time() - 3600);
             }
         };
     }
 
-    public function session($value='')
+    public function session()
     {
         return new class(){
-            public static function exists($name)
+            public function exists($name)
             {
                 return (isset($_SESSION[$name])) ? true : false ;
             }
-            public static function get($name)
+            public function get($name)
             {
                 return $_SESSION[$name] ?? null;
             }
-            public static function set($name, $value)
+            public function set($name, $value)
             {
                 return $_SESSION[$name] = $value;
             }
-            public static function delete($name)
+            public function delete($name)
             {
-                if (self::exists($name)) {
+                if ($this->exists($name)) {
                     unset($_SESSION[$name]);
                 }
             }
-            public static function destroy()
+            public function destroy()
             {
-                $_SESSION = array();
+                $_SESSION = [];
                 if (ini_get("session.use_cookies")) {
                     $params = session_get_cookie_params();
                     setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
@@ -84,11 +81,6 @@ class Application
         };
     }
 
-    public function file($value='')
-    {
-        return ;
-    }
-
     public function request()
     {
         $request = Request::createFromGlobals();
@@ -96,44 +88,47 @@ class Application
         $request->input = function (string $var, mixed $value = null) use ($data) {
             return $data[$var] ?? $value;
         };
-            $request->has = function (string $var) use ($data) {
-                return isset($data[$var]) ? true : false;
-            };
-            $request->validate = function (array $rules) use ($data) {
-                return Validation::init($data)->rules($rules);
-            };
-            $request->all = function () use ($data) {
-                return $data;
-            };
-            $request->userAgent = function () use () {
-                return preg_replace($regx='/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT']);
-            };
-            return $request;
+        $request->has = function (string $var) use ($data) {
+            return isset($data[$var]) ? true : false;
+        };
+        $request->validate = function (array $rules) use ($data) {
+            return Validation::init($data)->rules($rules);
+        };
+        $request->all = function () use ($data) {
+            return $data;
+        };
+        $request->userAgent = function (){
+            return preg_replace($regx='/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT']);
+        };
+        $request->htmlSanitize = function ($input){
+            return  htmlentities($input, ENT_QUOTES, 'UTF-8');
+        };
+        return $request;
     }
 
     public function response()
     {
-            return new class (){
-                public function __construct()
-                {
-                    $this->response = new Response();
-                }
-                public function send(mixed $response, int $code = 200, $headers = [])
-                {
-                        return $this->response->setStatusCode($code)->setContent($response)->send();
-                }public function json(mixed $response, int $code = 200, $headers = [])
-                {
-                        return $this->send($response, $code, $headers);
-                }
-                public function sendAndCache(mixed $response, int $code = 200, $timeInSeconds)
-                {
-                    if ($code === 200) {
-                            return $this->response->setStatusCode($code)->setContent($response)
-                            ->setTtl($timeInSeconds)->send();
-                    }
+        return new class (){
+            public function __construct()
+            {
+                $this->response = new Response();
+            }
+            public function send(mixed $response, int $code = 200, $headers = [])
+            {
                     return $this->response->setStatusCode($code)->setContent($response)->send();
+            }public function json(mixed $response, int $code = 200, $headers = [])
+            {
+                    return $this->send($response, $code, $headers);
+            }
+            public function sendAndCache(mixed $response, int $code = 200, $timeInSeconds)
+            {
+                if ($code === 200) {
+                        return $this->response->setStatusCode($code)->setContent($response)
+                        ->setTtl($timeInSeconds)->send();
                 }
-            };
+                return $this->response->setStatusCode($code)->setContent($response)->send();
+            }
+        };
     }
 
     public function url(): string
@@ -173,5 +168,40 @@ class Application
     public function dateTime(string $str = 'now')
     {
         return $this->string->time_from_string($str, $this->config()->get('APP_TIMEZONE'));
+    }
+
+    /**
+    * @example $arr1 = [
+    *           'function'=> 'strpos',
+    *           'parameters'=> ['home.php', '.']
+    *   ]; 
+    *   
+    * @example $arr2 = [
+    *           'function'=> 'strstr',
+    *           'parameters'=> ['home.php', '.']
+    *   ];
+    *   speed_cmp($arr1, $arr2);
+    */
+    public function compareSpeed(...$args)
+    {
+        if(count($args) > 1){
+            foreach($args as $key => $value){
+                $time_start= microtime(true);
+                $mem_start = memory_get_usage(true);
+                for ($i=0; $i <= 10000; $i++) { 
+                    call_user_func_array($args[$key]['function'], $args[$key]['parameters']);
+                }
+                $mem_end = memory_get_usage(true);
+                $time_end= microtime(true);
+                $time_elapsed= $time_end - $time_start;
+                $memory_used = $mem_end - $mem_start;
+                echo "<pre>";
+                echo "Time elapsed for testcase <b>{$key}</b> is {$time_elapsed}";
+                echo "Memory used for testcase <b>{$key}</b> is {$memory_used}";
+                echo "<pre>";
+            }
+        }else{
+            throw new Exception("Testcases must be atleast 2", 1);
+        }
     }
 }

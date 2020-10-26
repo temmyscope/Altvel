@@ -35,6 +35,9 @@ $request = $app->request();
 
 $response = $app->response();
 
+# $session = $app->session();
+
+# $cookie = $app->cookie();
 
 /*
 | You don't need to do anything here
@@ -95,7 +98,5 @@ $router->middleware('api-auth', function($request, $response, $next){
 });
 
 require __DIR__.'/routes/web.php';
-
-require __DIR__.'/routes/api.php';
 
 $router->run();

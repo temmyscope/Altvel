@@ -3,11 +3,9 @@
 namespace App;
 
 use App\Providers\{
-    Application, Cookie, Session
+    Application
 };
-
-use Seven\Model\Model,
-    ;
+use Seven\Model\Model;
 
 class Auth extends Model
 {
@@ -18,7 +16,7 @@ class Auth extends Model
 
     public function __construct($user = '')
     {
-        if ($user != '' and is_int($user)) {
+        global $app;        if ($user != '' and is_int($user)) {
             $this->id = $user;
         }
     }
