@@ -23,7 +23,7 @@ class Application
 
     public function cookie()
     {
-        return new class(){
+        return new class (){
             public function exists($name)
             {
                 return (isset($_COOKIE[$name])) ? true : false ;
@@ -49,7 +49,7 @@ class Application
 
     public function session()
     {
-        return new class(){
+        return new class (){
             public function exists($name)
             {
                 return (isset($_SESSION[$name])) ? true : false ;
@@ -96,10 +96,10 @@ class Application
         $request->all = function () use ($data) {
             return $data;
         };
-        $request->userAgent = function (){
-            return preg_replace($regx='/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT'] ?? "");
+        $request->userAgent = function () {
+            return preg_replace($regx = '/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT'] ?? "");
         };
-        $request->htmlSanitize = function (string $input){
+        $request->htmlSanitize = function (string $input) {
             return  htmlentities($input, ENT_QUOTES, 'UTF-8');
         };
         return $request;
@@ -171,23 +171,23 @@ class Application
 
     public function compareSpeed(...$args)
     {
-        if(count($args) > 1){
-            foreach($args as $key => $value){
-                $time_start= microtime(true);
+        if (count($args) > 1) {
+            foreach ($args as $key => $value) {
+                $time_start = microtime(true);
                 $mem_start = memory_get_usage(true);
-                for ($i=0; $i <= 10000; $i++) { 
+                for ($i = 0; $i <= 10000; $i++) {
                     call_user_func_array($args[$key]['function'], $args[$key]['parameters']);
                 }
                 $mem_end = memory_get_usage(true);
-                $time_end= microtime(true);
-                $time_elapsed= $time_end - $time_start;
+                $time_end = microtime(true);
+                $time_elapsed = $time_end - $time_start;
                 $memory_used = $mem_end - $mem_start;
                 echo "<pre>";
                 echo "Time elapsed for testcase <b>{$key}</b> is {$time_elapsed}";
                 echo "Memory used for testcase <b>{$key}</b> is {$memory_used}";
                 echo "<pre>";
             }
-        }else{
+        } else {
             throw new Exception("Testcases must be atleast 2", 1);
         }
     }

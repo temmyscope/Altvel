@@ -9,7 +9,7 @@
         "jenssegers/blade": "^1.3.0",
         "monolog/monolog": "^2.0@dev",
         "php-di/php-di": "^6.0.11",
-        "sevens/consoler": ">=v0.1.0",
+        "sevens/consoler": "^0.1.0",
         "sevens/model-trait": "^1.0.0",
         "sevens/router": "^1.0.0",
         "sevens/uploader-trait": "^1.0.0",
@@ -49,9 +49,9 @@
         ]
     },
     "keywords": [
-                "altvel", "engineer",
-                "laravel", "framework",
-                "engineer"
+        "altvel", "engineer",
+        "laravel", "framework",
+        "engineer"
     ],
     "require-dev": {
         "phpunit/phpunit": "^9.5@dev"

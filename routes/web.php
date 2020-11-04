@@ -21,12 +21,11 @@ $router->post('activate', [ AuthController::class, "forgot_password" ]);
 
 $router->get('search/:query', [ SearchController::class, 'index' ]);
 
-$router->use('web-auth', function() use($router){
+$router->use('web-auth', function () use ($router) {
 
-		$router->get('home', [ HomeController::class, 'all']);
+        $router->get('home', [ HomeController::class, 'all']);
 
-		$router->get('logout', [ AuthController::class, 'logout']);
-
+        $router->get('logout', [ AuthController::class, 'logout']);
 });
 
 /**
@@ -37,10 +36,9 @@ $router->use('web-auth', function() use($router){
 |
 */
 
-$router->use('api-auth;prefix:api;', function() use($router){
+$router->use('api-auth;prefix:api;', function () use ($router) {
 
-		$router->get('home', [ HomeController::class, 'all' ]);
+        $router->get('home', [ HomeController::class, 'all' ]);
 
-		$router->get('logout', [ AuthController::class, 'logout' ]);
-
+        $router->get('logout', [ AuthController::class, 'logout' ]);
 });
