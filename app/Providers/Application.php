@@ -98,9 +98,9 @@ class Application
             return $data;
         };
         $request->userAgent = function (){
-            return preg_replace($regx='/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT']);
+            return preg_replace($regx='/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT'] ?? "");
         };
-        $request->htmlSanitize = function ($input){
+        $request->htmlSanitize = function (string $input){
             return  htmlentities($input, ENT_QUOTES, 'UTF-8');
         };
         return $request;
@@ -134,7 +134,7 @@ class Application
 
     public function url(): string
     {
-            return $this->config->get('APP_URL');
+        return $this->config()->get('APP_URL');
     }
 
     public function decrypt(string $str): string
@@ -153,11 +153,10 @@ class Application
             public function __construct($config_array)
             {
                 $this->config = require __DIR__ . '/../../config/app.php';
-                $this->config = array_merge($this->config, $config_array);
             }
             public function get(string $var)
             {
-                return $this->config[$var] ?? null;
+                return $this->config[$var] ?? $_ENV[$var] ?? null;
             }
             public function all()
             {

@@ -127,7 +127,74 @@ php Engineer app::migrate
 
 [Read Seven Model ORM Documentation](https://github.com/temmyscope/model-trait.git).
 
+### AltVel Helpers: Global $app object, methods & functions
+##
 
+	- App specific objects
+
+```php
+
+$app->url(): #returns the APP_URL set in tee app.php config or .env file
+
+
+$app->dateTime(); #returns the current time based on the application Time Zone
+
+
+$app->encrypt(string $str); #encrypts passed string
+
+
+$app->decrypt(string $str); # decrypts the passed encrypted string
+
+
+$app->config()->get(string $str); #returns a data entry from the app.php config file
+
+
+/**
+* @example $arr1 = [
+*           'function'=> 'strpos',
+*           'parameters'=> ['home.php', '.']
+*   ]; 
+*   
+* @example $arr2 = [
+*           'function'=> 'strstr',
+*           'parameters'=> ['home.php', '.']
+*   ];
+* $app->compareSpeed($arr1, $arr2);
+*/
+$app->compareSpeed(...$args);
+```
+
+
+
+	- Request Object, Methods & Properties: $app->request() ... It is injected into every callable action for each endpoint
+
+```php
+
+$request = $app->request();
+  
+$request->input(string $name): #To access all end user requests whether from form requests or json api calls
+
+$request->has(string $name): #To access if an input is present; returns True OR False
+
+$request->validate(array $rules); #provides an object of the Seven\Vars\Validation class, preloaded with the request body
+
+$request->all(); #returns all inputs data as an associative array
+
+$request->userAgent(); #returns processed user agent information if availale; returns an empty string if not available
+
+$request->htmlSanitize(string $input); #returns html entities sanitizeed data
+```
+
+	- Response Object, methods & Properties: $app->response() ... It is injected into every callable action for each endpoint
+
+```php
+
+$response = $app->response();
+
+$response->send(string | array $resp, int $code = 200, $headers = []);
+
+$response->sendAndCache(string | array $response, int $code = 200, $timeInSeconds);
+```
 
 ### AltVel Sponsors
 ##

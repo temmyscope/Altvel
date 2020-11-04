@@ -102,19 +102,6 @@ function app()
     return (new App\Providers\Application());
 }
 
-function sanitize($dirty)
-{
-    $clean_input = [];
-    if (is_array($dirty)) {
-        foreach ($dirty as $k => $v) {
-            $clean_input[$k] = htmlentities($v, ENT_QUOTES, 'UTF-8');
-        }
-    } else {
-        $clean_input = htmlentities($dirty, ENT_QUOTES, 'UTF-8');
-    }
-    return $clean_input;
-}
-
 function dnd($var)
 {
     echo "<pre>";
@@ -125,15 +112,11 @@ function dnd($var)
 
 function resume()
 {
-    return getRedirect();
-}
-
-function getRedirect()
-{
-        $rdr = app()->config()->get('REDIRECT');
-    if (Session::exists($rdr)) {
-        $route = Session::get($rdr);
-        Session::delete($rdr);
+    global $app;
+    $rdr = app()->config()->get('REDIRECT');
+    if ($app->session()->exists($rdr)) {
+        $route = $app->session()->get($rdr);
+        $app->session()->delete($rdr);
         redirect(app()->config()->get('APP_URL'), $route);
     } else {
         redirect('home');
@@ -172,9 +155,10 @@ function mailer($email, $subject, $message)
 
 function status()
 {
-    if (App\Providers\Session::exists('errors')) {
+    global $app;
+    if ($app->session()->exists('errors')) {
         $html = "<div><ul class='alert alert-danger'>";
-        $errors = App\Providers\Session::get('errors');
+        $errors = $app->session()->get('errors');
         foreach ($errors as $error) {
             if (is_array($error)) {
                 $html .= '<li style="list-style: none;text-align: center; color: white;">' . $error[0] . '</li><br/>';
@@ -183,12 +167,12 @@ function status()
             }
         }
         $html .= '</ul></div>';
-        App\Providers\Session::delete('errors');
+        $app->session()->delete('errors');
         return $html;
     }
-    if (App\Providers\Session::exists('warnings')) {
+    if ($app->session()->exists('warnings')) {
         $html = "<div><ul class='alert alert-warning'>";
-        $errors = App\Providers\Session::get('warnings');
+        $errors = $app->session()->get('warnings');
         foreach ($errors as $error) {
             if (is_array($error)) {
                 $html .= '<li style="list-style: none;text-align: center; color: white;">' . $error[0] . '</li><br/>';
@@ -197,12 +181,12 @@ function status()
             }
         }
         $html .= '</ul></div>';
-        App\Providers\Session::delete('warnings');
+        $app->session()->delete('warnings');
         return $html;
     }
-    if (App\Providers\Session::exists('success')) {
+    if ($app->session()->exists('success')) {
         $html = "<div><ul class='alert alert-success'>";
-        $errors = App\Providers\Session::get('success');
+        $errors = $app->session()->get('success');
         foreach ($errors as $error) {
             if (is_array($error)) {
                 $html .= '<li style="list-style: none;text-align: center; color: white;">' . $error[0] . '</li><br/>';
@@ -211,29 +195,10 @@ function status()
             }
         }
         $html .= '</ul></div>';
-        App\Providers\Session::delete('success');
+        $app->session()->delete('success');
         return $html;
     }
 }
-
-function errors()
-{
-    if (App\Providers\Session::exists('errors')) {
-        $html = "<div><ul class='alert alert-danger'>";
-        $errors = App\Providers\Session::get('_errors');
-        foreach ($errors as $error) {
-            if (is_array($error)) {
-                $html .= '<li style="list-style: none;text-align: center; color: white;">' . $error[0] . '</li><br/>';
-            } else {
-                $html .= '<li style="list-style: none;text-align: center; color: white;">' . $error . '</li><br/>';
-            }
-        }
-        $html .= '</ul></div>';
-        App\Providers\Session::delete('errors');
-        return $html;
-    }
-}
-
 
 /**
 *   @param formats may vary e.g. controllerName@endpoint; controllerName.endpoint; controllerName/endpoint;
@@ -264,38 +229,6 @@ function view($view, $data = []): void
         }
     };
     $v->rend($view, $data);
-}
-
-function get($var = '')
-{
-    if (!empty($var)) {
-        return (isset($_GET[$var])) ? sanitize($_GET[$var]) : null;
-    } else {
-        return (!empty($_GET)) ? (object) sanitize($_GET) : null;
-    }
-}
-
-function post($var = '')
-{
-    if (!empty($var)) {
-        return (isset($_POST[$var])) ? sanitize($_POST[$var]) : null;
-    } else {
-        return (!empty($_POST)) ? (object) sanitize($_POST) : null;
-    }
-}
-
-function request($var = '')
-{
-    if (!empty($var)) {
-        return (isset($_REQUEST[$var]) && !empty($_REQUEST[$var])) ? sanitize($_REQUEST[$var]) : null;
-    }
-    return (!empty($_REQUEST)) ? (object) sanitize($_REQUEST) : null;
-}
-
-function destroy_request(): bool
-{
-    $_GET = $_POST = $_REQUEST = $_FILES = [];
-    return true;
 }
 
 function html()
