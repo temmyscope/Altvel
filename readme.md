@@ -196,6 +196,17 @@ $response->send(string | array $resp, int $code = 200, $headers = []);
 $response->sendAndCache(string | array $response, int $code = 200, $timeInSeconds);
 ```
 
+### Preparing yo
+##
+
+***Preparing your altvel application for deployment simply removes all files not loaded <br>
+by the PHP Server or Application in deployment.<br><br>
+Note: Make sure to keep a development backup.***
+
+```bash
+php Engineer app::production
+```
+
 ### AltVel Sponsors
 ##
 If you are interested in becoming a sponsor, please visit the AltVel [Patreon page](https://patreon.com/temmyscope).

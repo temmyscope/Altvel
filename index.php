@@ -39,7 +39,6 @@ $response = $app->response();
 
 # $cookie = $app->cookie();
 
-
 /*
 |
 |------------------------------------------------------------------------------|
@@ -88,4 +87,7 @@ $router->middleware('api-auth', function($request, $response, $next){
 
 require __DIR__.'/routes/web.php';
 
-$router->run();
+$router->run(
+ 	$_SERVER['REQUEST_METHOD'], 
+ 	$_SERVER['PATH_INFO'] ?? '/'
+);

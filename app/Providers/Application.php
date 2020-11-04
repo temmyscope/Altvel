@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\{Request, Response};
 
 class Application
 {
-  
     public function __construct()
     {
         if (!getenv('APP_DEBUG')) {
@@ -147,12 +146,12 @@ class Application
         return $this->string->encrypt($str);
     }
 
-    public function config($config_array = [])
+    public function config()
     {
-        return new class ($config_array){
-            public function __construct($config_array)
+        return new class (){
+            public function __construct()
             {
-                $this->config = require __DIR__ . '/../../config/app.php';
+                $this->config = include __DIR__ . '/../../config/app.php';
             }
             public function get(string $var)
             {
@@ -170,18 +169,6 @@ class Application
         return $this->string->time_from_string($str, $this->config()->get('APP_TIMEZONE'));
     }
 
-    /**
-    * @example $arr1 = [
-    *           'function'=> 'strpos',
-    *           'parameters'=> ['home.php', '.']
-    *   ]; 
-    *   
-    * @example $arr2 = [
-    *           'function'=> 'strstr',
-    *           'parameters'=> ['home.php', '.']
-    *   ];
-    *   speed_cmp($arr1, $arr2);
-    */
     public function compareSpeed(...$args)
     {
         if(count($args) > 1){
