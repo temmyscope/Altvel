@@ -12,13 +12,12 @@ class Auth extends Model
     protected static $table = 'users';
     protected static $fulltext = [];
 
+    use StateLessAuth;
+
     public function __construct($user = '')
-    {
-        global $app;        
+    {     
         if ($user != '' and is_int($user)) {
             $this->id = $user;
         }
     }
-
-    
 }
