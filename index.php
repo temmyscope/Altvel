@@ -18,7 +18,7 @@ use App\Providers\Session;
 */
 $loader = require __DIR__.'/vendor/autoload.php';
 
-# For adding namespaces
+#For adding namespaces
 //$loader->add('namespace', 'directory');
 
 /*
@@ -29,7 +29,7 @@ $loader = require __DIR__.'/vendor/autoload.php';
 |
 */
 
-$app = app();
+$app = new App\Providers\Application();
 
 $request = $app->request();
 
@@ -38,14 +38,6 @@ $response = $app->response();
 # $session = $app->session();
 
 # $cookie = $app->cookie();
-
-/*
-| You don't need to do anything here
-|-----------------------------------------------------------------------------|
-| Load Altvel-Specific Application Object 																		|
-|-----------------------------------------------------------------------------|
-|
-*/
 
 
 
@@ -72,7 +64,7 @@ $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_DRIVER']);
 |
 */
 
-$router = new Router($namespace = 'App\Controllers');
+$router = New Router($namespace = 'App\Controllers');
 
 //$router->enableCache(__DIR__.'/cache');
 

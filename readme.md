@@ -57,9 +57,6 @@ coomposer create-project altvel/altvel
  php Engineer app::view profile edit
 ```
 
-
-
-
 	=> The only file exempted is the app.blade.php which is the default view file for rendering.
 
 	=> All classes that extend the Model class, should be placed directly under the app folder.

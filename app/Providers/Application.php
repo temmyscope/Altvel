@@ -22,7 +22,7 @@ class Application
         ini_set("error_log", __DIR__ . '/../../error.log');
     }
 
-    public function cookie($value='')
+    public function cookie()
     {
         return new class(){
             public function exists($name)
@@ -115,15 +115,16 @@ class Application
             }
             public function send(mixed $response, int $code = 200, $headers = [])
             {
-                    return $this->response->setStatusCode($code)->setContent($response)->send();
-            }public function json(mixed $response, int $code = 200, $headers = [])
+                return $this->response->setStatusCode($code)->setContent($response)->send();
+            }
+            public function json(mixed $response, int $code = 200, $headers = [])
             {
-                    return $this->send($response, $code, $headers);
+                return $this->send($response, $code, $headers);
             }
             public function sendAndCache(mixed $response, int $code = 200, $timeInSeconds)
             {
                 if ($code === 200) {
-                        return $this->response->setStatusCode($code)->setContent($response)
+                    return $this->response->setStatusCode($code)->setContent($response)
                         ->setTtl($timeInSeconds)->send();
                 }
                 return $this->response->setStatusCode($code)->setContent($response)->send();
