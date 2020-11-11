@@ -15,7 +15,7 @@ class Auth extends Model
     use StateLessAuth;
 
     public function __construct($user = '')
-    {     
+    {
         if ($user != '' and is_int($user)) {
             $this->id = $user;
         }

@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Seven\Vars\{Strings, Validation};
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Seven\File\Uploader;
+use Symfony\Component\HttpFoundation\Response;
 
 class Application
 {
@@ -19,32 +20,6 @@ class Application
     {
         ini_set("log_errors", true);
         ini_set("error_log", __DIR__ . '/../../error.log');
-    }
-
-    public function cookie()
-    {
-        return new class (){
-            public function exists($name)
-            {
-                return (isset($_COOKIE[$name])) ? true : false ;
-            }
-            public function get($name)
-            {
-                return $_COOKIE[$name] ?? null;
-            }
-            public function set($name, $value)
-            {
-                $time = time() + (app()->get('REMEMBER_ME_COOKIE_EXPIRY'));
-                if (setcookie($name, $value, $time, '/')) {
-                    return true;
-                }
-                return false;
-            }
-            public function delete($name)
-            {
-                $this->set($name, '', time() - 3600);
-            }
-        };
     }
 
     public function session()
@@ -82,10 +57,28 @@ class Application
 
     public function request()
     {
-        $request = Request::createFromGlobals();
-        $data = json_decode($request->getContent(), true) ?? $_REQUEST;
+        $request = new \StdClass();
+        $data = json_decode(file_get_contents('file://input'), true) ?? $_POST;
         $request->input = function (string $var, mixed $value = null) use ($data) {
             return $data[$var] ?? $value;
+        };
+        $request->header = function(string $var){
+            return $_SERVER[$var] ?? NULL;
+        };
+        $request->bearerToken = function(string $authKey="HTTP_AUTHORIZATION"){
+            $auth = strtok($_SERVER[$authKey] ?? "", "Bearer");
+            return trim($auth);
+        };
+        $requet->get = function(string $var){
+            return $_GET[$var] ?? NULL;
+        };
+        $request->upload = function(string $var){
+            $config = (new Application())->config();
+            return (new Uploader(
+                $config->get('cdn'),
+                $config->get('ALLOWED_UPLOAD_TYPES'),
+                $config->get('UPLOAD_LIMIT')
+            ))->upload($var);
         };
         $request->has = function (string $var) use ($data) {
             return isset($data[$var]) ? true : false;
@@ -112,15 +105,11 @@ class Application
             {
                 $this->response = new Response();
             }
-            public function send(mixed $response, int $code = 200, $headers = [])
+            public function send($response, int $code = 200, $headers = [])
             {
                 return $this->response->setStatusCode($code)->setContent($response)->send();
             }
-            public function json(mixed $response, int $code = 200, $headers = [])
-            {
-                return $this->send($response, $code, $headers);
-            }
-            public function sendAndCache(mixed $response, int $code = 200, $timeInSeconds)
+            public function sendAndCache($response, int $code = 200, $timeInSeconds)
             {
                 if ($code === 200) {
                     return $this->response->setStatusCode($code)->setContent($response)
@@ -129,11 +118,6 @@ class Application
                 return $this->response->setStatusCode($code)->setContent($response)->send();
             }
         };
-    }
-
-    public function url(): string
-    {
-        return $this->config()->get('APP_URL');
     }
 
     public function decrypt(string $str): string
@@ -166,29 +150,6 @@ class Application
 
     public function dateTime(string $str = 'now')
     {
-        return $this->string->time_from_string($str, $this->config()->get('APP_TIMEZONE'));
-    }
-
-    public function compareSpeed(...$args)
-    {
-        if (count($args) > 1) {
-            foreach ($args as $key => $value) {
-                $time_start = microtime(true);
-                $mem_start = memory_get_usage(true);
-                for ($i = 0; $i <= 10000; $i++) {
-                    call_user_func_array($args[$key]['function'], $args[$key]['parameters']);
-                }
-                $mem_end = memory_get_usage(true);
-                $time_end = microtime(true);
-                $time_elapsed = $time_end - $time_start;
-                $memory_used = $mem_end - $mem_start;
-                echo "<pre>";
-                echo "Time elapsed for testcase <b>{$key}</b> is {$time_elapsed}";
-                echo "Memory used for testcase <b>{$key}</b> is {$memory_used}";
-                echo "<pre>";
-            }
-        } else {
-            throw new Exception("Testcases must be atleast 2", 1);
-        }
+        return $this->string->timeFromString($str, $this->config()->get('APP_TIMEZONE'));
     }
 }

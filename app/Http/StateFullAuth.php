@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Http;
 
 use Seven\Vars\Strings;
 
-trait StateFulAuth{
+trait StateFulAuth
+{
 
-	public static function FindByEmail($email)
+
+
+    public static function FindByEmail($email)
     {
         return static::setTable('users')->findFirst(['email' => $email]);
     }
@@ -22,7 +26,7 @@ trait StateFulAuth{
 
     public function login($user, $rememberMe)
     {
-    	global $app;
+        global $app;
         $app =  $app->config();
         Session::set($app->get('CURRENT_USER_SESSION_NAME'), $this->id);
         if ($rememberMe) {
@@ -49,7 +53,7 @@ trait StateFulAuth{
 
     public function logout()
     {
-    	global $app;
+        global $app;
         $app =  $app->config();
         Session::delete($app->get('CURRENT_USER_SESSION_NAME'));
         Session::destroy();
@@ -74,7 +78,7 @@ trait StateFulAuth{
 
     public function del()
     {
-    	global $app;
+        global $app;
         $data = static::setTable('user_sessions')->findfirst([
              'user_agent' => Session::uagent_no_version(),
              'session' => COOKIE::get($app->config()->get('REMEMBER_ME_COOKIE_NAME'))

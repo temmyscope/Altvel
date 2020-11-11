@@ -1,10 +1,11 @@
 <?php
 /*
 |-----------------------------------------------------------------------------|
-|                            USER SESSION STARTS                              |
+|                            USER SESSION STARTS                           		|
 |-----------------------------------------------------------------------------|
 */
 session_start();
+
 use Seven\Router\Router;
 use Symfony\Component\HttpFoundation\{Request, Response};
 use App\Providers\Session;
@@ -20,7 +21,7 @@ use App\Auth;
 $loader = require __DIR__ . '/vendor/autoload.php';
 
 #For adding namespaces
-//$loader->add('namespace', 'directory');
+$loader->add('App\Http', __DIR__.'/app/Http/');
 
 /*
 | You don't need to do anything here
@@ -64,16 +65,14 @@ $router = New Router($namespace = 'App\Controllers');
 $router->registerProviders($request, $response);
 
 $router->middleware('web-auth', function ($request, $response, $next) use ($app) {
-
     if ( !$app->session->exists('id') ) {
-        $app->session->set('redirect', $request->getPathInfo());
+        $app->session->set('redirect', $_SERVER['PATH_INFO']);
         redirect('login');
     }
     $next($request, $response);
 });
 
 $router->middleware('api-auth', function ($request, $response, $next) {
-
     $token = $request->headers->get('Authorization');
     if (!$token || !Auth::isValid($token)) {
         return $response->setContent('Unauthorized.')

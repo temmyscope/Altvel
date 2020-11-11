@@ -36,8 +36,6 @@ coomposer create-project altvel/altvel
 	
 ***Automatically generate keys for secured session, cookie and salt***
 
-***A Utility HTML Template Builder [Fast Development for Backend Php developers]***
-
 
 ### The following conventions are used:
 ##
@@ -77,12 +75,7 @@ AltVel has no syntax of its own but uses the inherited php syntax, making it ext
 	
 	=> Generates csrf token for each page to improve security against cross-site request forgery
 	
-	=> Together with the user_navbar array in Config.php, NavBar with dropdowns can be automatically generated
-	
 	=> Generates CSRF-secured Form using  Array construct passed to generateForm static method
-
-### In order to access data sent to the View renderer, use $dataSource variable; 
-##
 
 ### Database Creation, Migrations & Populations
 
@@ -163,8 +156,6 @@ $app->config()->get(string $str); #returns a data entry from the app.php config 
 */
 $app->compareSpeed(...$args);
 ```
-
-
 
 	- Request Object, Methods & Properties: $app->request() ... It is injected into every callable action for each endpoint
 
