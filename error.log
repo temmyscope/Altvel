@@ -62,3 +62,15 @@ Stack trace:
 [13-Nov-2020 11:50:47 Europe/Berlin] PHP Notice:  Undefined variable: home in C:\xampp\htdocs\altvel\cache\87d2f7cea42f74d04bbff6ea999227a615471dbd.php on line 8
 [13-Nov-2020 11:51:20 Europe/Berlin] PHP Notice:  compact(): Undefined variable: welcome here shows in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php on line 11
 [13-Nov-2020 11:51:22 Europe/Berlin] PHP Notice:  Undefined variable: home in C:\xampp\htdocs\altvel\cache\87d2f7cea42f74d04bbff6ea999227a615471dbd.php on line 8
+[13-Nov-2020 13:17:03 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method stdClass::input() in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php:10
+Stack trace:
+#0 [internal function]: App\Controllers\HomeController->Index(Object(stdClass), Object(class@anonymous))
+#1 C:\xampp\htdocs\altvel\vendor\php-di\invoker\src\Invoker.php(75): call_user_func_array(Array, Array)
+#2 C:\xampp\htdocs\altvel\vendor\php-di\php-di\src\Container.php(269): Invoker\Invoker->call(Array, Array)
+#3 C:\xampp\htdocs\altvel\vendor\sevens\router\src\Router.php(168): DI\Container->call(Array, Array)
+#4 C:\xampp\htdocs\altvel\vendor\sevens\router\src\Router.php(135): Seven\Router\Router->call(Array, Array)
+#5 C:\xampp\htdocs\altvel\vendor\sevens\router\src\Router.php(336): Seven\Router\Router->__invoke(Object(stdClass), Object(class@anonymous))
+#6 C:\xampp\htdocs\altvel\vendor\sevens\router\src\Router.php(363): Seven\Router\Router->process('GET', '', Array)
+#7 C:\xampp\htdocs\altvel\index.php(88): Seven\Router\Router->run('GET', '')
+#8 {main}
+  thrown in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php on line 10

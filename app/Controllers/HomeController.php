@@ -7,7 +7,7 @@ class HomeController extends Controller
 
     public function Index($request, $response)
     {
-    	$response->send("Welcome Home");
+    	$response->send("Welcome Home". $request->input('var'));
       #view('home.index');
     }
 
