@@ -1,4 +1,4 @@
-<?php App\Helpers\HTML::csrf(); $app = app(); ?>
+<?php $_SESSION['csrf'] = $_SESSION['csrf'] ?? Seven\Vars\Strings::randToken(); $app = app(); ?>
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -20,8 +20,6 @@
 <link href='<?php echo $app->get("APP_URL")."/public/assets/css/custom.css"; ?>' type='text/css' rel='stylesheet'>
 </head>
 <body><div id='app'>
-
-<?= App\Helpers\HTML::nav(); ?>
 
 <main class='py-4'>
 <div class='container'><div class='row justify-content-center'>

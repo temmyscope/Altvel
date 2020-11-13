@@ -58,7 +58,7 @@ class Application
     public function request()
     {
         $request = new \StdClass();
-        $data = json_decode(file_get_contents('file://input'), true) ?? $_POST;
+        $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
         $request->input = function (string $var, mixed $value = null) use ($data) {
             return $data[$var] ?? $value;
         };
@@ -69,7 +69,7 @@ class Application
             $auth = strtok($_SERVER[$authKey] ?? "", "Bearer");
             return trim($auth);
         };
-        $requet->get = function(string $var){
+        $request->get = function(string $var){
             return $_GET[$var] ?? NULL;
         };
         $request->upload = function(string $var){

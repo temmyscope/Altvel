@@ -9,15 +9,7 @@
 | Here is where you can register all of the routes for your application.
 */
 
-$router->get('/', [ AuthController::class, "index" ]);
-
-$router->post('login', [ AuthController::class, "login" ]);
-
-$router->post('register', [ AuthController::class, "register" ]);
-
-$router->post('forgot-password', [ AuthController::class, "forgot_password" ]);
-
-$router->post('activate', [ AuthController::class, "forgot_password" ]);
+$router->get('/', [ HomeController::class, "index" ]);
 
 $router->get('search/:query', [ SearchController::class, 'index' ]);
 

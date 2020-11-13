@@ -2,9 +2,10 @@
 @section('title', 'Home')
 @section('content')
 
-	<?php use App\Helpers\HTML; ?>
+	You are now logged In:
 
-	<?= HTML::Card('Home'); ?>
-	You are now logged In
+	<?php 
+		dnd($home); 
+	?>
 	
 @endsection

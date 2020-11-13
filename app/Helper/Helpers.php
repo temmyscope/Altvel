@@ -26,8 +26,12 @@ function compareSpeed(...$args)
 
 function app()
 {
-    global $app
+    global $app;
     return $app;
+}
+
+function config(){
+    return app()->config();
 }
 
 function app_url(){
@@ -36,7 +40,7 @@ function app_url(){
 
 function dnd($var)
 {
-    echo "<pre style='background-color:black;text-color:green;'>";
+    echo "<pre style='background-color:black;color:green;font-size:2.8em;'>";
     var_dump($var);
     echo "<pre>";
     die();
@@ -88,12 +92,12 @@ function view($view, $data = []): void
     $v = new class () extends Blade{
         public function __construct()
         {
-            parent::__construct(app()->get('view'), app()->get('cache'));
+            parent::__construct(config()->get('view'), config()->get('cache'));
         }
-        public function rend($viewName, $data = [])
+        public function rend($viewName, $data)
         {
             try {
-                echo $this->render($viewName, compact($data));
+                echo $this->render($viewName, $data);
             } catch (Exception $e) {
                 echo $e->getMessage();
             }

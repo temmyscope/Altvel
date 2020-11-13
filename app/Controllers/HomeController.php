@@ -5,10 +5,9 @@ namespace App\Controllers;
 class HomeController extends Controller
 {
 
-
-
-    public function IndexEndPoint()
+    public function Index()
     {
-        view('home.index');
+
+        view('home.index', compact(['home' => 'welcome here']));
     }
 }
