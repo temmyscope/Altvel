@@ -57,43 +57,56 @@ class Application
 
     public function request()
     {
-        $request = new \StdClass();
-        $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
-        $request->input = function (string $var, mixed $value = null) use ($data) {
-            return $data[$var] ?? $value;
-        };
-        $request->header = function(string $var){
-            return $_SERVER[$var] ?? NULL;
-        };
-        $request->bearerToken = function(string $authKey="HTTP_AUTHORIZATION"){
-            $auth = strtok($_SERVER[$authKey] ?? "", "Bearer");
-            return trim($auth);
-        };
-        $request->get = function(string $var){
-            return $_GET[$var] ?? NULL;
-        };
-        $request->upload = function(string $var){
-            $config = (new Application())->config();
-            return (new Uploader(
-                $config->get('cdn'),
-                $config->get('ALLOWED_UPLOAD_TYPES'),
-                $config->get('UPLOAD_LIMIT')
-            ))->upload($var);
-        };
-        $request->has = function (string $var) use ($data) {
-            return isset($data[$var]) ? true : false;
-        };
-        $request->validate = function (array $rules) use ($data) {
-            return Validation::init($data)->rules($rules);
-        };
-        $request->all = function () use ($data) {
-            return $data;
-        };
-        $request->userAgent = function () {
-            return preg_replace($regx = '/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT'] ?? "");
-        };
-        $request->htmlSanitize = function (string $input) {
-            return  htmlentities($input, ENT_QUOTES, 'UTF-8');
+        $request = new class(){
+            public function __construct(){
+                $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+            }
+            public function all()
+            {
+                return $this->data;
+            }
+            public function input(string $var, mixed $value = null)
+            {
+                return $this->data[$var] ?? $value;
+            }
+            public function header(string $var)
+            {
+                return $_SERVER[$var] ?? NULL;
+            }
+            public function bearerToken(string $authKey="HTTP_AUTHORIZATION")
+            {
+                $auth = strtok($_SERVER[$authKey] ?? "", "Bearer");
+                return trim($auth);
+            }
+            public function get(string $var)
+            {
+                return $_GET[$var] ?? NULL;
+            }
+            public function has(string $var)
+            {
+                return isset($data[$var]) ? true : false;
+            }
+            public function upload(string $var)
+            {
+                $config = (new Application())->config();
+                return (new Uploader(
+                    $config->get('cdn'),
+                    $config->get('ALLOWED_UPLOAD_TYPES'),
+                    $config->get('UPLOAD_LIMIT')
+                ))->upload($var);
+            }
+            public function validate(array $rules)
+            {
+                return Validation::init($this->data)->rules($rules);
+            }
+            public function htmlSanitize(string $input)
+            {
+                return  htmlentities($input, ENT_QUOTES, 'UTF-8');
+            }
+            public function userAgent(string $var = "")
+            {
+               return preg_replace($regx = '/\/[a-zA-Z0-9.]*/', '', $uagent = $_SERVER['HTTP_USER_AGENT'] ?? $var);
+            }
         };
         return $request;
     }
