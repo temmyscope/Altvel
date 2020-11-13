@@ -113,7 +113,7 @@ class Application
             }
             public function sendAndCache($response, $statusCode = 200, $timeInSeconds)
             {
-                if ($cache === true && ($statusCode ==200 || $statusCode ==201)) {
+                if ($timeInSeconds > 0 && ($statusCode ==200 || $statusCode ==201)) {
                     header("Cache-Control: no-transform,public,max-age={$timeInSeconds},s-maxage={$timeInSeconds}");
                 }
                 header('Content-Type: application/json; charset=utf-8');
