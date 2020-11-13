@@ -14,6 +14,7 @@ class AltvelTest extends TestCase
     }
 
     public function testEndpoints(){
+    	
     	$this->router->get('home', function($request, $response){
     		return "home works";
     	});
