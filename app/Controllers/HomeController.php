@@ -7,7 +7,7 @@ class HomeController extends Controller
 
     public function Index()
     {
-
-        view('home.index', compact(['home' => 'welcome here']));
+    		echo "Here we go";
+        view('home.index');
     }
 }

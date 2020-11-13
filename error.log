@@ -58,3 +58,7 @@ Stack trace:
 [13-Nov-2020 11:45:44 Europe/Berlin] PHP Notice:  Undefined variable: home in C:\xampp\htdocs\altvel\cache\87d2f7cea42f74d04bbff6ea999227a615471dbd.php on line 7
 [13-Nov-2020 11:47:26 Europe/Berlin] PHP Notice:  compact(): Undefined variable: welcome here in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php on line 11
 [13-Nov-2020 11:47:28 Europe/Berlin] PHP Notice:  Undefined variable: home in C:\xampp\htdocs\altvel\cache\87d2f7cea42f74d04bbff6ea999227a615471dbd.php on line 8
+[13-Nov-2020 11:50:42 Europe/Berlin] PHP Notice:  compact(): Undefined variable: welcome here in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php on line 11
+[13-Nov-2020 11:50:47 Europe/Berlin] PHP Notice:  Undefined variable: home in C:\xampp\htdocs\altvel\cache\87d2f7cea42f74d04bbff6ea999227a615471dbd.php on line 8
+[13-Nov-2020 11:51:20 Europe/Berlin] PHP Notice:  compact(): Undefined variable: welcome here shows in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php on line 11
+[13-Nov-2020 11:51:22 Europe/Berlin] PHP Notice:  Undefined variable: home in C:\xampp\htdocs\altvel\cache\87d2f7cea42f74d04bbff6ea999227a615471dbd.php on line 8

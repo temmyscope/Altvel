@@ -101,21 +101,24 @@ class Application
     public function response()
     {
         return new class (){
-            public function __construct()
+            public function __construct(){}
+            public function send($response, $statusCode = 200, $headers = [])
             {
-                $this->response = new Response();
-            }
-            public function send($response, int $code = 200, $headers = [])
-            {
-                return $this->response->setStatusCode($code)->setContent($response)->send();
-            }
-            public function sendAndCache($response, int $code = 200, $timeInSeconds)
-            {
-                if ($code === 200) {
-                    return $this->response->setStatusCode($code)->setContent($response)
-                        ->setTtl($timeInSeconds)->send();
+                foreach ($headers as $key => $value) {
+                    header("{$key}: {$value}");       
                 }
-                return $this->response->setStatusCode($code)->setContent($response)->send();
+                header('Content-Type: application/json; charset=utf-8');
+                http_response_code($statusCode);
+                echo json_encode($response, JSON_PRETTY_PRINT);
+            }
+            public function sendAndCache($response, $statusCode = 200, $timeInSeconds)
+            {
+                if ($cache === true && ($statusCode ==200 || $statusCode ==201)) {
+                    header("Cache-Control: no-transform,public,max-age={$timeInSeconds},s-maxage={$timeInSeconds}");
+                }
+                header('Content-Type: application/json; charset=utf-8');
+                http_response_code($status_code);
+                echo json_encode($data, JSON_PRETTY_PRINT);
             }
         };
     }

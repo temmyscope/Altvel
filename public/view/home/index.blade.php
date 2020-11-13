@@ -3,9 +3,5 @@
 @section('content')
 
 	You are now logged In:
-
-	<?php 
-		dnd($home); 
-	?>
 	
 @endsection

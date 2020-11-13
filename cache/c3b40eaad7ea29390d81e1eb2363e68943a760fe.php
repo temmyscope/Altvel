@@ -1,4 +1,4 @@
-<?php $_SESSION['csrf'] = $_SESSION['csrf'] ?? Seven\Vars\Strings::randToken(); $app = app(); ?>
+<?php $_SESSION['csrf'] = $_SESSION['csrf'] ?? Seven\Vars\Strings::randToken(); $app = config(); ?>
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -8,16 +8,16 @@
 <meta name='csrf-token' content="<?php echo $_SESSION['csrf']; ?>">
 <meta name='author' content='TemmyScope'>
 <title><?php echo $app->get('APP_NAME'); ?> | <?php echo $__env->yieldContent('title'); ?> </title>
-<link rel='icon' href='<?php echo $app->APP_URL(); ?>'>
+<link rel='icon' href='<?php echo app_url(); ?>'>
 <script type='application/x-javascript'> 
   addEventListener('load', function(){setTimeout(hideURLbar, 0); }, false); 
   function hideURLbar(){window.scrollTo(0,1);}
 </script>
-<script src='<?php echo $app->get("APP_URL")."public/assets/js/app.js"; ?>' defer></script>
+<script src='<?php echo app_url()."public/assets/js/app.js"; ?>' defer></script>
 <link rel='dns-prefetch' href='//fonts.gstatic.com'>
 <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
-<link href='<?php echo $app->get("APP_URL")."/public/assets/css/app.css"; ?>' type='text/css' rel='stylesheet' >
-<link href='<?php echo $app->get("APP_URL")."/public/assets/css/custom.css"; ?>' type='text/css' rel='stylesheet'>
+<link href='<?php echo app_url()."/public/assets/css/app.css"; ?>' type='text/css' rel='stylesheet' >
+<link href='<?php echo app_url()."/public/assets/css/custom.css"; ?>' type='text/css' rel='stylesheet'>
 </head>
 <body><div id='app'>
 
