@@ -5,9 +5,9 @@ namespace App\Controllers;
 class HomeController extends Controller
 {
 
-    public function Index()
+    public function Index($request, $response)
     {
-    		echo "Here we go";
-        view('home.index');
+    	$response->send("Here we go");
+        #view('home.index');
     }
 }
