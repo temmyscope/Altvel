@@ -103,5 +103,8 @@ function view($view, $data = []): void
             }
         }
     };
+    if (!class_exists(Blade::class)) {
+        dnd("You need to install Jenssegers/blade library to use the 'view' helper");
+    }
     $v->rend($view, $data);
 }
