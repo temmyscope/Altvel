@@ -2,6 +2,6 @@
 @section('title', 'Home')
 @section('content')
 
-	You are now logged In:
+	You are now logged In: {{ $home }}
 	
 @endsection

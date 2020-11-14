@@ -74,3 +74,13 @@ Stack trace:
 #7 C:\xampp\htdocs\altvel\index.php(88): Seven\Router\Router->run('GET', '')
 #8 {main}
   thrown in C:\xampp\htdocs\altvel\app\Controllers\HomeController.php on line 10
+[14-Nov-2020 01:36:16 Europe/Berlin] PHP Fatal error:  Uncaught TypeError: Argument 2 passed to Jenssegers\Blade\Blade::render() must be of the type array, int given, called in C:\xampp\htdocs\altvel\app\Helper\Helpers.php on line 100 and defined in C:\xampp\htdocs\altvel\vendor\jenssegers\blade\src\Blade.php:45
+Stack trace:
+#0 C:\xampp\htdocs\altvel\app\Helper\Helpers.php(100): Jenssegers\Blade\Blade->render('home.index', 1)
+#1 C:\xampp\htdocs\altvel\app\Helper\Helpers.php(109): class@anonymous->rend('home.index', Array)
+#2 C:\xampp\htdocs\altvel\app\Controllers\HomeController.php(11): view('home.index', Array)
+#3 [internal function]: App\Controllers\HomeController->Index(Object(class@anonymous), Object(class@anonymous))
+#4 C:\xampp\htdocs\altvel\vendor\php-di\invoker\src\Invoker.php(75): call_user_func_array(Array, Array)
+#5 C:\xampp\htdocs\altvel\vendor\php-di\php-di\src\Container.php(269): Invoker\Invoker->call(Array, Array)
+#6 C:\xampp\htdocs\altvel\vendor\sevens\router\src\Router.php(168): DI\Container->call(Array, Array)
+#7 C:\xampp\htdocs\altvel\vendor\se in C:\xampp\htdocs\altvel\vendor\jenssegers\blade\src\Blade.php on line 45
