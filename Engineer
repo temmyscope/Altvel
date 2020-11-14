@@ -18,6 +18,20 @@ define('ROOT', __DIR__);
 
 require __DIR__.'/vendor/autoload.php';
 
+$file = "";
+if (file_exists(".env")) {
+	$file = ".env";
+}else{
+	$file = ".env.example";
+}
+
+if (!file_exists($file)) {
+	throw new Exception(
+		"No .env OR .env.example files. please craete one with the following
+		dependencies: \n 'DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_DRIVER'
+		", 1);
+}
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/.env.example');
 $dotenv->load();
 

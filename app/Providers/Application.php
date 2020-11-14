@@ -10,10 +10,10 @@ class Application
 {
     public function __construct()
     {
-        if (!getenv('APP_DEBUG')) {
+        if (!env('APP_DEBUG')) {
             $this->setLogger();
         }
-        $this->string = new Strings(getenv('APP_ALG'), getenv('APP_SALT'), getenv('APP_IV'));
+        $this->string = new Strings(env('APP_ALG'), env('APP_SALT'), env('APP_IV'));
     }
 
     private function setLogger()
@@ -124,7 +124,7 @@ class Application
                 http_response_code($statusCode);
                 echo json_encode($response, JSON_PRETTY_PRINT);
             }
-            public function sendAndCache($response, $statusCode = 200, $timeInSeconds)
+            public function sendAndCache($response, int $statusCode = 200, int $timeInSeconds = 0)
             {
                 if ($timeInSeconds > 0 && ($statusCode ==200 || $statusCode ==201)) {
                     header("Cache-Control: no-transform,public,max-age={$timeInSeconds},s-maxage={$timeInSeconds}");
