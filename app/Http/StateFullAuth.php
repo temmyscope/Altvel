@@ -7,8 +7,6 @@ use Seven\Vars\Strings;
 trait StateFulAuth
 {
 
-
-
     public static function FindByEmail($email)
     {
         return static::setTable('users')->findFirst(['email' => $email]);
